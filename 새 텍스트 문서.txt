@@ -4,6 +4,14 @@
 C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet
 
 
+
+		초기화
+
+
+geth --datadir C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet init .\genesis.json
+
+
+
 		구동
 
 
