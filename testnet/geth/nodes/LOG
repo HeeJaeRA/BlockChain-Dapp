@@ -308,3 +308,13 @@
 10:35:01.673828 version@stat F·[2 1] S·494B[318B 176B] Sc·[0.50 0.00]
 10:35:01.684686 db@janitor F·5 G·0
 10:35:01.684686 db@open done T·23.1628ms
+=============== Jan 8, 2020 (KST) ===============
+13:22:46.258990 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:22:46.264005 version@stat F·[2 1] S·494B[318B 176B] Sc·[0.50 0.00]
+13:22:46.264005 db@open opening
+13:22:46.265008 journal@recovery F·1
+13:22:46.266039 journal@recovery recovering @71
+13:22:46.272159 memdb@flush created L0@73 N·1 S·159B "loc..seq,v46":"loc..seq,v46"
+13:22:46.273143 version@stat F·[3 1] S·653B[477B 176B] Sc·[0.75 0.00]
+13:22:46.279610 db@janitor F·6 G·0
+13:22:46.279610 db@open done T·15.6054ms

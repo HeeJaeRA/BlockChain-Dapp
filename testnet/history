@@ -73,3 +73,17 @@ eth.mining
 miner.stop()
 miner.start(1)
 miner.stop()
+miner.start(1)
+eth.miner
+miner.stop()
+miner.start(1)
+miner.stop()
+eth.miner
+eth.mining
+miner.start(1)
+miner.stop()
+eth.mining
+miner.start(1)
+eth.mining
+miner.stop()
+eth.mining
