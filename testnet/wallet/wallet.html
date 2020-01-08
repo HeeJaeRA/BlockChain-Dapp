@@ -1,34 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <script src="./node_modules/web3/dist/web3.js"></script>
-        <script src="./node_modules/jquery/dist/jquery.js"></script>
-    </head>
-    <body>
-        <h1>ETHER Wallet</h1>
-        <!-- 계정별 잔액 현황 -->
+<head>
+    <meta charset="utf-8">
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/web3/dist/web3.js"></script>
+    <style>
+        * { font-size: 20px; }
+        #divStatus, select {
+            font-family: consolas;
+            font-size: 11px;
+        }
+        span { 
+            display: inline-block;
+            width: 120px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>ETHER WALLET</h1>
+    <!-- 계정별 잔액 현황 -->
+    <div id="divStatus"></div>
         <table>
-            <tr>
-                <td><tr>계정 잔액</tr></td>
-
-                <td>합계</td>
-                <td>4000</td>
-            </tr>
+        <tr>
+            <th>계정</th>
+            <th>잔액</th>
+        </tr>
+        <tr>
+            <td>0x42342342342</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>0x42342342342</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>0x42342342342</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>합계</td>
+            <td>4000</td>
+        </tr>
         </table>
-        <div id="divStatus"></div>
-        <p><span>보내는 사람</span>
-            <select class="accountsList" id="fromAccounts"><option value="">선택하세요</option></select>
-        </p>
-        <p><span>받는 사람</span>
-            <select class="accountsList" id="toAccounts"><option value="">선택하세요</option></select>
-        </p>
-        <p><span>송금액</span>
-            <input id="amount" type="number" /> ETHER</p></td>
-        </p>
-        <p><span>패스워드</span>
-            <input id="formPassword" type="password" /><button id="btnSend">송금</button>
-        </p>
+    <p>
+        <span>보내는 사람</span>
+        <select id="fromAccount">
+            <option>선택하세요.</option>
+        </select>
+    </p>
+    <p>
+        <span>받는 사람</span>
+        <select id="toAccount">
+            <option>선택하세요.</option>
+        </select>
+    </p>
+    <p>
+        <span>송금액</span>
+        <input type="number" id="amount"> ETHER
+    </p>
+    <p>
+        <span>패스워드</span>
+        <input type="password" id="fromPassword">
+        <button id="btnSend">송금</button id="btnSend">
+    </p>
+
         <style>
             * { font-size: 20px; }
         #divStatus, .accountsList { font-family: consolas; font-size: 11pt; }
@@ -39,13 +75,13 @@
         <script type="text/javascript">
             var Web3 = require("web3");
             var web3 = new Web3();
-            web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+            web3.setProvider(new web3.providers.HttpProvider("http://150.230.56.150:8545"));
 
             function setAccountsList() {
-                var accoutns = web3.eth.accounts;
-                for (var i = 0; i < accoutns.length; i++){
+                var accounts = web3.eth.accounts;
+                for (var i = 0; i < accounts.length; i++){
                     var account = accounts[i];
-                    $('accountsList').append('<option value="'+account+'"">'+account+'</option>')
+                    $('.accountsList').append('<option value="'+account+'"">'+account+'</option>')
                 }
             }
             
@@ -64,20 +100,27 @@
                 }
                 $('#tblStatus').append('<tr><th>총액</th><td align="right">'+total+'</td></tr>');
             }
-        
+
+            $(function() {
+                setAccountsList();
+                web.eth.filter('lates').watch(function() {
+                    showStatus();
+                });
+
+                $('#btnSend').click(function() {
+                    if (web3.personal.unlockAccout($('#fromAccounts').val(), $('#fromPassword').val())) {
+                        web3.eth.sendTransaction({
+                            from    : $('#fromAccounts').val(),
+                            to      : $('#toAccounts').val(),
+                            value   : web3.toWei($('#amount').val(), "ether")
+                        }, function(err, txid) {
+                            if (!err)   console.log('Transaction ID : '+txid);
+                            else        console.log(err);
+                        });
+                    }
+                });
+            });
         
         </script>
-
-
-
-
-
-
-
-
-
-
-
-
     </body>
 </html>
