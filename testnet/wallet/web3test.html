@@ -24,7 +24,7 @@
             // 연동 여부를 확인
             console.log(web3.isConnected());
             $('#log').text(web3.isConnected());
-
+            
             console.log("### 1");
  
             // 동기 방식으로 블록정보를 조회
@@ -70,8 +70,58 @@
                 else console.log(err);
             });
             
+ // geth 노드에 계정 정보를 조회
+ var accounts = web3.eth.accounts;
+            console.log(accounts);
+ 
+            // 첫번째 계정의 이더 단위 잔액을 조회
+            var balance = web3.fromWei(web3.eth.getBalance(web3.eth.accounts[0]),'ether');
+            console.log(parseFloat(balance));
+ 
+            // 모든 계정의 잔액을 출력
+            var accounts = web3.eth.accounts; // <-- 계정 정보를 담고 있는 배열
             
+            /* 방법1 배열의 인덱스를 이용한 처리
+            for (i = 0; i < accounts.length; i++) {
+                var balance = web3.fromWei(web3.eth.getBalance(web3.eth.accounts[i]),'ether');
+                console.log(`${accounts[i]}의 잔액은 ${parseFloat(balance)}입니다.`);
+            }
+            */
+ 
+            /* 방법2 forEach 구문을 이용한 처리
+            accounts.forEach(function(account) {
+                var balance = web3.fromWei(web3.eth.getBalance(account),'ether');
+                console.log(`${account}의 잔액은 ${parseFloat(balance)}입니다.`);
+            });
+            */
+ 
+            // 방법3 forEach 구문을 이용한 처리
+            accounts.forEach(account => {
+                var balance = web3.fromWei(web3.eth.getBalance(account),'ether');
+                console.log(`${account}의 잔액은 ${parseFloat(balance)}입니다.`);
+            });
+ 
+ 
+            // 송금 
+            // accounts[0] -> 1 eth -> accounts[1]
+            if (web3.personal.unlockAccount(web3.eth.accounts[0], "pass0")) {
+ 
+                web3.eth.sendTransaction({
+                    from: web3.eth.accounts[0],
+                    to: web3.eth.accounts[1],
+                    value: web3.toWei(1,'ether')
+                }, function(err, txid) {
+                    if (!err) {
+                        console.log(`송금이 접수되었습니다. 트랜잭션ID는 ${txid}입니다.`);
+                        toastr.info(`송금이 접수되었습니다. 트랜잭션ID는 ${txid}입니다.`);
+                    } else {
+                        console.error(`오류가 발생했습니다. ${err}`);
+                        toastr.error(`오류가 발생했습니다. ${err}`);
+                    }
+                });
+            } 
         });
+
 
     </script>
 </head>
