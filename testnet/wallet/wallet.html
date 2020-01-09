@@ -5,7 +5,7 @@
     <script src="./node_modules/jquery/dist/jquery.js"></script>
     <script src="./node_modules/web3/dist/web3.js"></script>
     <style>
-        * { font-size: 20px; }
+        * { font-size: 12px; }
         #divStatus, select {
             font-family: consolas;
             font-size: 11px;
@@ -22,10 +22,6 @@
     <!-- 계정별 잔액 현황 -->
     <div id="divStatus"></div>
         <table id="tblStatus">
-        <tr>
-            <th>계정</th>
-            <th>잔액</th>
-        </tr>
         </table>
     <p>
         <span>보내는 사람</span>
@@ -50,35 +46,103 @@
     </p>
 
     <script>
-        var Web3 = require("web3");
-        var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        const Web3 = require("web3");
+        const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
         // geth 노드의 계정을 가져와서 보내는 사람과 받는 사람 선택창에 설정
         var accounts = web3.eth.accounts;
+        /*
         for (var i = 0; i < accounts.length; i++) {
             // var o = '<option value="' + accounts[i] + '">' + accounts[i] + '</option>';
             var o = `<option value="${accounts[i]}">${accounts[i]}</option>`;
             $('#fromAccount').append(o);
             $('#toAccount').append(o);
         }
-
-        accounts.forEach(a => {
-           var o = `<option value="${a}">${a}</option>`;
-           $('#fromAccount').append(o);
-           $('#toAccount').append(o);
+        */
+//  선택된 보내는 사람, 받는 사람 계정 정보를 저장하는 변수
+        let fromAccount;
+        let toAccount;
+ 
+        //  보내는 사람, 받는 사람 계정을 선택 시 변수에 값을 저장
+        $('#fromAccount').mouseup(function() {
+            fromAccount = $(this).val();
         });
-
+        $('#toAccount').mouseup(function() {
+            toAccount = $(this).val();
+        });
+        
+        // geth 노드의 계정을 가져와서 보내는 사람과 받는 사람 선택창에 설정
+        function getAccountInfo() {
+            $('#fromAccount').empty();
+            $('#toAccount').empty();
+            
+            let accounts = web3.eth.accounts;
+            accounts.forEach(a => {
+                let b = parseFloat(web3.fromWei(web3.eth.getBalance(a),"ether"));
+                $('#fromAccount').append(
+                    `<option value="${a}" ${a == fromAccount ? 'selected':''}>
+                        ${a.substr(0,5)}...${a.substr(-5)}(${b}ETH)
+                    </option>`
+                );
+                $('#toAccount').append(
+                    `<option value="${a}" ${a == toAccount ? 'selected':''}>
+                        ${a.substr(0,5)}...${a.substr(-5)}(${b}ETH)
+                    </option>`
+                );
+            });
+        }
+ 
         // geth에서 계정을 가져와서 계정별 잔액을 divStatus에 출력
         function showStatus() {
-            var accounts = web3.eth.accounts;
+            let accounts = web3.eth.accounts;
+ 
+            // 기존 내용을 삭제
+            $('#tblStatus').empty();
+            $('#tblStatus').append(`<tr><th>계정</th><th>잔액</th></tr>`);
+ 
+            // 가져온 내용을 추가
             accounts.forEach(a => {
-                var b = parseFloat(web3.fromWei(web3.eth.getBalance(a), "ether"));
-                var tr = `<tr><td>${a}</td><td>${b}</td></tr>`;
+                let b = parseFloat(web3.fromWei(web3.eth.getBalance(a), "ether"));
+                let tr = `<tr><td>${a}</td><td>${b}</td></tr>`;
                 $('#tblStatus').append(tr);
             });
         }
-
+ 
+        getAccountInfo();
         showStatus();
+ 
+        // 블록이 생성될 때마다 계정별 잔액을 갱신
+        web3.eth.filter("latest").watch(function() {
+            getAccountInfo();
+            showStatus();
+        })
+
+        // 송금 버튼 클릭 시 동작
+        $('#btnSend').click(function() {
+            //  보내는 사람, 받는 사람, 송금액, 패스워드 입력값을 콘솔에 출력
+            console.log('보내는 사람', $('#fromAccount').val());
+            console.log('받는 사람'  , $('#toAccount').val());
+            console.log('송금액'     , $('#amount').val());
+            console.log('패스워드'   , $('#fromPassword').val());
+
+
+        //  보내는 사람에서 받는 사람으로 송금액을 전송하는 코드를 추가
+        let isUnlock = web3.personal.unlockAccount(fromAccount, $('#fromPassword').val());
+            if (isUnlock) {
+                web3.eth.sendTransaction({
+                    from: fromAccount, 
+                    to: toAccount, 
+                    value: web3.toWei($('#amount').val(),'ether')
+                }, function (err, txid) {
+                    if (!err) {
+                        console.log(`txid = ${txid}`)
+                    } else {
+                        console.error(`error >>> ${err}`);
+                    }
+                });
+            }
+    });
+
 
     </script>
 </body>
