@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head> 
+    <meta charset="utf-8">
+ 
+    <script src="./node_modules/web3/dist/web3.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+ 
+    <!-- toastr 모듈 -->
+    <link href="./node_modules/toastr/build/toastr.min.css" rel="stylesheet">
+    <script src="./node_modules/toastr/build/toastr.min.js"></script>
+    
+    <script>
+        $(function() {
+            const Web3 = require('web3');
+            const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+
+            // 컨트랙트 객체 생성
+            let helloworldContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"say","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_greeting","type":"string"}],"name":"setGreeting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"greeting","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+
+            // 컨트랙트 배포 > Remix browser > 컨트랙트 주소 > 컨트랙트 인스턴스 생성
+            let hw = helloworldContract.at("0x2C7635715d1608a3c072d59F87daFC3DD23Ebddd")
+            
+            web3.eth.filter("latest").watch(function() {
+                let no = web3.eth.blockNumber;
+                let greeting = hw.say();
+                console.log(no, greeting);
+            });
+
+            // 컨트랙트 기능 호출
+            console.log(hw.say());
+
+            // 컨트랙트 상태 변수 변경 함수 호출
+            // seetGreeting 함수 파라미터 | 트랜잭션 실행에 필요한 정보 | 콜백함수
+            let isUnlock = web3.personal.unlockAccount(web3.eth.accounts[0], "pass0");
+            if (isUnlock){
+                hw.setGreeting.sendTransaction(
+                    "Hello, Ethereuem!!!", 
+                    { from: web3.eth.accounts[0], gas: 10000000 }, 
+                    function(err, txid) {
+                    if (!err) console.log(txid);
+                    else console.error(err);
+                    }
+                );
+            }
+        });
+    </script>
+</head>
+<body>
+ 
+</body>
+</html>
