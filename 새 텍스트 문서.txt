@@ -18,6 +18,9 @@ geth --datadir C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet --networki
 
 		http ¿¬°á
 
+
+C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet\wallet
+
 node .\node_modules\http-server\bin\http-server
 
 
