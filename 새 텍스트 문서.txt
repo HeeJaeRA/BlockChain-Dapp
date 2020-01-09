@@ -18,7 +18,6 @@ geth --datadir C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet --networki
 
 		http 연결
 
-
 C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet\wallet
 
 node .\node_modules\http-server\bin\http-server
@@ -26,5 +25,15 @@ node .\node_modules\http-server\bin\http-server
 
 		메타마스크
 
-
 oxygen couch subway review curtain blade duty valve speak faint helmet drive
+
+
+		POSTMAN
+
+https://www.getpostman.com/downloads/
+
+
+		REMIX
+
+http://remix.ethereum.org/
+
