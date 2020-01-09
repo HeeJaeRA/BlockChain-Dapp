@@ -31,7 +31,7 @@
             console.log(hw.say());
 
             // 컨트랙트 상태 변수 변경 함수 호출
-            // seetGreeting 함수 파라미터 | 트랜잭션 실행에 필요한 정보 | 콜백함수
+            // setGreeting 함수 파라미터 | 트랜잭션 실행에 필요한 정보 | 콜백함수
             let isUnlock = web3.personal.unlockAccount(web3.eth.accounts[0], "pass0");
             if (isUnlock){
                 hw.setGreeting.sendTransaction(
