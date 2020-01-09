@@ -1,24 +1,24 @@
 		폴더 위치
 
 
-C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet
+C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet
 
 
 
 		초기화
 
 
-geth --datadir C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet init .\genesis.json
+geth --datadir C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet init .\genesis.json
 
 
 
 		구동
 
 
-geth --datadir C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet console --networkid 4649 --nodiscover --maxpeers 0
+geth --datadir C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet console --networkid 4649 --nodiscover --maxpeers 0
 
 
-geth --datadir C:\Users\Administrator\Documents\GitHub\BlockChain-Dapp\testnet --networkid 4649 --nodiscover --maxpeers 0 console --rpc --rpcaddr "0.0.0.0" --rpcport 8545 --rpccorsdomain "*" --rpcapi "db,eth,net,web3,admin,debug,miner,shh,txpool,personal" --allow-insecure-unlock
+geth --datadir C:\Users\user\Documents\GitHub\BlockChain-Dapp\testnet --networkid 4649 --nodiscover --maxpeers 0 console --rpc --rpcaddr "0.0.0.0" --rpcport 8545 --rpccorsdomain "*" --rpcapi "db,eth,net,web3,admin,debug,miner,shh,txpool,personal" --allow-insecure-unlock
 
 
 
