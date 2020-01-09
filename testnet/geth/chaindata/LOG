@@ -121,3 +121,5 @@
 15:17:17.752785 db@janitor F·5 G·1
 15:17:17.752785 db@janitor removing table-22
 15:17:17.753942 db@open done T·57.0082ms
+16:38:17.712179 db@close closing
+16:38:17.713179 db@close done T·999.4µs

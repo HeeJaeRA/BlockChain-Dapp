@@ -16,10 +16,10 @@
             const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
             // 컨트랙트 객체 생성
-            let helloworldContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"say","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_greeting","type":"string"}],"name":"setGreeting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"greeting","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+            let helloworldContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"say","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_greeting","type":"string"}],"name":"setGreeting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"greeting","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_greeting","type":"string"}],"name":"EventSetGreeting","type":"event"}]);
 
             // 컨트랙트 배포 > Remix browser > 컨트랙트 주소 > 컨트랙트 인스턴스 생성
-            let hw = helloworldContract.at("0x2C7635715d1608a3c072d59F87daFC3DD23Ebddd")
+            let hw = helloworldContract.at("0x431BC52978dd9DEeE5481fBE7413DF2bB1881203")
             
             web3.eth.filter("latest").watch(function() {
                 let no = web3.eth.blockNumber;
@@ -27,8 +27,8 @@
                 console.log(no, greeting);
             });
 
-            // 컨트랙트 기능 호출
-            console.log(hw.say());
+             // 컨트랙트 함수를 호출
+             console.log(hw.say());
 
             // 컨트랙트 상태 변수 변경 함수 호출
             // setGreeting 함수 파라미터 | 트랜잭션 실행에 필요한 정보 | 콜백함수
@@ -38,12 +38,25 @@
                     "Hello, Ethereuem!!!", 
                     { from: web3.eth.accounts[0], gas: 10000000 }, 
                     function(err, txid) {
-                    if (!err) console.log(txid);
+                    if (!err) toastr.info(`접수되었습니다. ${txid}`);
                     else console.error(err);
                     }
                 );
             }
+
+            // event 발생 시 동작
+            hw.EventSetGreeting().watch(function(err,msg) {
+                if (!err) {
+                    //console.log(msg);
+                    //console.log(hw.say());
+                    toastr.success(`접수 내역이 반영되었습니다. ${msg.args.greeting}`);
+                }
+                else {
+                    console.log(err);
+                }
+            })
         });
+        
     </script>
 </head>
 <body>
