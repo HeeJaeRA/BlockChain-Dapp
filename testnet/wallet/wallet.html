@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/web3/dist/web3.js"></script>
+    <style>
+        * { font-size: 20px; }
+        #divStatus, select {
+            font-family: consolas;
+            font-size: 11px;
+        }
+        span { 
+            display: inline-block;
+            width: 120px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>ETHER WALLET</h1>
+    <!-- 계정별 잔액 현황 -->
+    <div id="divStatus"></div>
+        <table id="tblStatus">
+        <tr>
+            <th>계정</th>
+            <th>잔액</th>
+        </tr>
+        </table>
+    <p>
+        <span>보내는 사람</span>
+        <select id="fromAccount">
+            <option>선택하세요.</option>
+        </select>
+    </p>
+    <p>
+        <span>받는 사람</span>
+        <select id="toAccount">
+            <option>선택하세요.</option>
+        </select>
+    </p>
+    <p>
+        <span>송금액</span>
+        <input type="number" id="amount"> ETHER
+    </p>
+    <p>
+        <span>패스워드</span>
+        <input type="password" id="fromPassword">
+        <button id="btnSend">송금</button id="btnSend">
+    </p>
+
+    <script>
+        var Web3 = require("web3");
+        var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+        // geth 노드의 계정을 가져와서 보내는 사람과 받는 사람 선택창에 설정
+        var accounts = web3.eth.accounts;
+        for (var i = 0; i < accounts.length; i++) {
+            // var o = '<option value="' + accounts[i] + '">' + accounts[i] + '</option>';
+            var o = `<option value="${accounts[i]}">${accounts[i]}</option>`;
+            $('#fromAccount').append(o);
+            $('#toAccount').append(o);
+        }
+
+        accounts.forEach(a => {
+           var o = `<option value="${a}">${a}</option>`;
+           $('#fromAccount').append(o);
+           $('#toAccount').append(o);
+        });
+
+        // geth에서 계정을 가져와서 계정별 잔액을 divStatus에 출력
+        function showStatus() {
+            var accounts = web3.eth.accounts;
+            accounts.forEach(a => {
+                var b = parseFloat(web3.fromWei(web3.eth.getBalance(a), "ether"));
+                var tr = `<tr><td>${a}</td><td>${b}</td></tr>`;
+                $('#tblStatus').append(tr);
+            });
+        }
+
+        showStatus();
+
+    </script>
+</body>
+</html>
+
+

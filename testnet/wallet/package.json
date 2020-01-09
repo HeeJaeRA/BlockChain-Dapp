@@ -1,0 +1,17 @@
+{
+  "name": "wallet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.1",
+    "jquery": "^3.4.1",
+    "toastr": "^2.1.4",
+    "web3": "^0.19.1"
+  }
+}
